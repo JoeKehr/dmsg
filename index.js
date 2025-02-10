@@ -1,7 +1,22 @@
 const crypto = require('crypto');
 const ecdh = crypto.createECDH('secp256k1');
+const fs = require('fs');
+const dgram = require('dgram');
 const bip39 = require ('@scure/bip39');
 const wordlist = require ('@scure/bip39/wordlists/english').wordlist;
+const { v4: uuidv4 } = require('uuid');
+const STORAGE_PATH = "./test.json";
+
+if (!fs.existsSync(STORAGE_PATH)) {
+    fs.writeFileSync(STORAGE_PATH, '{"local":{},"nodes":[]}');
+}
+
+var storage = require(STORAGE_PATH);
+var socketUDP = null;
+
+let hash = crypto.createHash('md5').update('some_string').digest("hex")
+hash += crypto.createHash('sha256').update('some_string').digest("hex")
+console.log(hash);
 
 /*
 console.log(
@@ -16,17 +31,47 @@ console.log(createKeyPair ("side since wise peace fiscal gravity sauce adjust ma
     , ""))
 */
 
-//TODO
+var keys = createKeyPair (generateSeedPhrase(), "");
+storePrivateKey(keys.privateKey);
+storePublicKey(keys.publicKey);
+generateUuid (keys.publicKey);
+console.log(storage);
+
 // Store Private Key
+function storePrivateKey (prvkey) {
+    storage.local.privateKey = prvkey;
+}
 
-//TODO
 // Store Public Key
+function storePublicKey (pubkey) {
+    storage.local.publicKey = pubkey;
+}
 
-//TODO
 // Generate Unique Identifier
+function generateUuid () {
+    storage.local.uid = uuidv4();
+}
 
 //TODO
-// Add Nodes
+// DGRAM socket creation
+function socketCreation () {
+    socketUDP = dgram.createSocket('udp4');
+    socketUDP.on('message', receive)
+    socketUDP.bind(5845);
+}
+
+//TODO
+// Receive Dgram
+function receive (msg, rInfo) {
+
+}
+
+//TODO
+// Receive and Store Node Info
+// Spread Node Info if new
+function receiveNodeInfo (nodeInfo) {
+
+}
 
 //TODO
 // Send Public Key
@@ -52,7 +97,7 @@ console.log(createKeyPair ("side since wise peace fiscal gravity sauce adjust ma
 // Send Message
 
 //TODO
-// Dispatch message received
+// Dispatch message received to k closest nodes from the final receiver
 
 
 function generateSeedPhrase () {
