@@ -1,99 +1,56 @@
-
-
 📌 Introduction
 
 This project is a decentralized messaging application, allowing you to send and receive messages without relying on a centralized infrastructure.
-It's providing end-to-end encryption and uses a implémentation similar to DHT (Distributed Hash Table) to store and share messages.
+It's providing end-to-end encryption and uses an implementation similar to DHT (Distributed Hash Table) to store and share messages.
 
-✨ Fonctionnalités
 
-🔐 Chiffrement de bout en bout des messages
+✨ Features
 
-📡 Transmission sur un réseau décentralisé
+- 🔐 End-to-end encryption of the messages
 
-🔄 Stockage temporaire des messages sur plusieurs nœuds lorsque le destinataire est hors ligne
+- 📡 Transmission on a decentralized network
 
-🔎 Mise à jour dynamique des adresses IP dans les tables de routage lors de la reconnexion
+- 🔄 Messages are temporarily stored on multiple nodes while recipient is offline
 
-🔑 Récupération du compte via une Seed Phrase et un mot de passe 
+- 🔎 Dynamic update of the routing tables by updating IP addresses and ports when reconnecting
 
-📂 Support des messages texte
+- 🔑 Retrieve account with Seed Phrase and Password
+
+- 📂 Supports only text messages (for now)
 
 
 
 🔧 Architecture
 
-Le système repose sur les éléments suivants :
+System relies on these following elements  :
 
-1. Custom implémentation of DHT (Distributed Hash Table) :
+1. Custom implementation of DHT (Distributed Hash Table) :
 
-Chaque nœud stocke une table de routage des autres nœuds actifs.
+    Each node stores a routing table listing IP/Ports of other nodes.
 
-Les messages sont stockés temporairement sur plusieurs nœuds en attendant la réception par le destinataire.
-
-
-
-2. Gestion des Messages :
-
-Lorsqu'un utilisateur envoie un message, il est chiffré avec la clé secrète partagée avec le destinataire.
-
-Le message est ensuite diffusé sur plusieurs nœuds jusqu'à ce que le destinataire le récupère.
-
-Une fois reçu, le message est supprimé des nœuds intermédiaires.
+    Messages are temporarily stored on multiple nodes waiting reception by the receiver.
 
 
 
-3. Mise à Jour des Adresses IP :
+2. Handling Messages :
 
-Lors de la reconnexion d’un nœud, il met à jour son IP et la propage aux nœuds voisins.
+    When a user sends a message, it is encrypted using a shared key between the sender and the receiver.
 
+    The message is then sent to several nodes hopping until receiver gets it.
 
-
-
-🔐 Algorithmes Cryptographiques
-
-Chiffrement :
-
-Échange de clés : ECDH (Curve25519)
+    Once message reaches final destination, it is removed from intermediary nodes.
 
 
-Hachage :
 
-SHA-256 pour les identifiants uniques des messages
+3. Updating IP addresses :
 
-
-🚀 Installation
-
-Prérequis
-
-Node.js (version 18+ recommandée)
-
-NPM
-
-Bibliothèques cryptographiques (libsodium, OpenPGP.js, crypto)
+   When a node is reconnecting, it uses hole punching via another known node to get its own IP/Port and spreads the information to other known nodes.
 
 
-🛠 API
+🔐 Cryptographic Algorithms
 
-📩 Envoi d'un message
-
-POST /send
-{
-  "to": "clé_publique_destinataire",
-  "message": "Message chiffré en base64"
-}
-
-📥 Récupération des messages
-
-GET /receive
-{
-  "messages": [
-    {
-      "from": "clé_publique_envoyeur",
-      "message": "Message chiffré en base64",
-      "timestamp": "2025-02-19T12:34:56Z"
-    }
-  ]
-}
-
-
+- Encryption :
+  - Shared Key : ECDH (Curve25519)
+  - Symmetric encryption : AES-256-cbc
+- Hashing :
+  - SHA-256 (or UUID?) for unique identifier of message
