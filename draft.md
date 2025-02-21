@@ -1,8 +1,9 @@
-Messagerie Décentralisée avec Chiffrement de Bout en Bout
+
 
 📌 Introduction
 
-Ce projet est une messagerie décentralisée sécurisée, permettant d'échanger des messages de manière privée sans dépendre d'une infrastructure centralisée. Il utilise le chiffrement de bout en bout (E2EE) et une DHT (Distributed Hash Table) pour stocker et transmettre les messages.
+This project is a decentralized messaging application, allowing you to send and receive messages without relying on a centralized infrastructure.
+It's providing end-to-end encryption and uses a implémentation similar to DHT (Distributed Hash Table) to store and share messages.
 
 ✨ Fonctionnalités
 
